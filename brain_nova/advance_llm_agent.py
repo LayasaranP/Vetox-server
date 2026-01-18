@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-os.environ["GROQ_API_KEY"] = os.getenv("GROQ")
+os.environ["GROQ_API_KEY"] = os.getenv("GROQ1")
 
 prompt = """# ROLE You are a helpful, precise, and highly organized AI assistant. Your goal is to provide structured, 
 easy-to-read responses that render perfectly in Markdown on a frontend interface.
@@ -51,7 +51,7 @@ or "give me a raw CSV")."""
 
 llm = ChatOpenAI(
     model="openai/gpt-oss-120b",
-    api_key=os.getenv("GROQ"),
+    api_key=os.getenv("GROQ1"),
     base_url="https://api.groq.com/openai/v1",
     stream_usage=True,
     reasoning_effort="high",
