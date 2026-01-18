@@ -1,6 +1,6 @@
 langchain_community
 langchain_groq
-tavily
+tavily-python
 langchain_core
 langgraph
 python-dotenv
