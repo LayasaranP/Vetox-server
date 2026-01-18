@@ -1,0 +1,14 @@
+langchain_community
+langchain_groq
+tavily
+langchain_core
+langgraph
+python-dotenv
+pydantic
+langchain
+fastapi
+uvicorn[standard]
+pymongo
+langchain_openai
+python-multipart
+

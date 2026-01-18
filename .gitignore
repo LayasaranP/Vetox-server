@@ -1,0 +1,113 @@
+# Python / bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.venv*
+venv*
+env*
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.example    # ← keep this if you want template, otherwise ignore too
+.secrets
+*.pem
+*.key
+
+# Testing & coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.pytest_cache/
+.pytest_cache/
+tox/
+nox/
+.coverage.*
+coverage.*
+
+# Logs & databases (very common in FastAPI projects)
+*.log
+logs/
+*.logs
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.sql
+
+# IDE / editor files
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker & container stuff
+*.dockerignore
+Dockerfile*
+docker-compose*
+docker-compose.*.yml
+.docker/
+.container/
+volumes/
+
+# Build & deployment artifacts
+*.pid
+*.seed
+*.pid.lock
+.next/
+dist/
+build/
+*.bak
+*.backup
+
+# mypy / type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff / other modern linters (if you use them)
+.ruff_cache/
+
+# Optional: Poetry / Hatch / PDM lockfiles (uncomment if you DON'T want to commit them)
+# poetry.lock
+# pdm.lock
+# hatch.lock
+
+# Optional: if you use coverage data you want to keep → don't ignore .coverage
