@@ -7,13 +7,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 coding_llm = ChatOpenAI(
-    model="deepseek-r1-0528:free",
-    openai_api_key="sk-reHoWGNa-Eridgkb_lJ07lR-uvY4y1QpMadjpkj7_XcfU5NeKMlU0NVCSjVFsdIJiRY",
-    openai_api_base="https://api.routeway.ai/v1",
-    temperature=0.6,
+    model="openai/gpt-oss-120b",
+    api_key=os.getenv("GROQ1"),
+    base_url="https://api.groq.com/openai/v1",
+    stream_usage=True,
     reasoning_effort="high",
     max_retries=2,
-    streaming=True,
+    temperature=0.6,
+    top_p=0.95,
 )
 
 
