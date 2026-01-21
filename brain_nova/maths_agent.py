@@ -1,31 +1,75 @@
+from langchain.agents.middleware.tool_call_limit import ToolCallLimitMiddleware
+from langchain.agents import create_agent
+from langgraph.checkpoint.memory import InMemorySaver
+from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from tavily import TavilyClient
+import os
+from dotenv import load_dotenv
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a math solver. At the end of the solution give some follow-up questions or suggestions."),
-    ("human", "{question}")
-])
+load_dotenv()
+
+prompt = "You are a math solver. At the end of the solution give some follow-up questions or suggestions."
 
 maths_llm = ChatOpenAI(
-    model="deepseek-r1-0528:free",
-    openai_api_key="sk--dkWRoL1V4zO08e3uS427x7W_eZ4VjenRJiPyYz6bUhIxPbuBBqlYGdSFjuz918n6tBFQZqnOX7DMOE",
-    openai_api_base="https://api.routeway.ai/v1",
-    streaming=True,
+    model="openai/gpt-oss-120b",
+    api_key=os.getenv("GROQ1"),
+    base_url="https://api.groq.com/openai/v1",
+    stream_usage=True,
+    reasoning_effort="high",
+    max_retries=2,
+    temperature=0.6,
+    top_p=0.95,
+)
+
+client = TavilyClient(os.getenv("WEB"))
+
+
+@tool("basic_web_search",
+      description="Perform a web search using a search engine to retrieve relevant results based on the provided "
+                  "query. Supports basic search operators. Ideal for fact-checking, research, or chaining with "
+                  "browse tools.")
+def basic_web_search(query: str) -> str:
+    """
+    Perform a web search using a search engine to retrieve relevant results based on the provided query.
+
+    This tool enables searching the internet for information. It supports basic search operators
+    (e.g., site:reddit.com, filetype:pdf, "exact phrase") to refine results and improve precision.
+    Results include titles, URLs, and brief snippets for quick assessment.
+   """
+
+    response = client.search(
+        query=query,
+        auto_parameters=True,
+        max_results=6
+    )
+
+    contents = ""
+    for res in response["results"]:
+        contents = res['content']
+
+    return contents
+
+
+maths_agent = create_agent(
+    model=maths_llm,
+    tools=[basic_web_search],
+    system_prompt=prompt,
+    middleware=[
+        ToolCallLimitMiddleware(
+            tool_name="basic_web_search",
+            run_limit=5,
+        )
+    ],
+    checkpointer=InMemorySaver()
 )
 
 
-def maths_solver(question: str, llm=maths_llm):
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a math solver."),
-        ("human", "{question}")
-    ])
-
-    chain = prompt | maths_llm
-
-    full_response = ""
-    for chunk in chain.stream({"question": question}):
-        if chunk.content:
-            full_response += chunk.content
-            yield chunk.content
-
-
+def maths_solver(question: str, chat_id):
+    for token, metadata in maths_agent.stream(
+            {"messages": [{"role": "user", "content": question}]},
+            config={"configurable": {"thread_id": chat_id}},
+            stream_mode="messages"
+    ):
+        if token.content:
+            yield token.content
