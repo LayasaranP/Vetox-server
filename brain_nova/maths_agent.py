@@ -65,10 +65,9 @@ maths_agent = create_agent(
 )
 
 
-def maths_solver(question: str, chat_id):
+def maths_solver(question: str):
     for token, metadata in maths_agent.stream(
             {"messages": [{"role": "user", "content": question}]},
-            config={"configurable": {"thread_id": chat_id}},
             stream_mode="messages"
     ):
         if token.content:
