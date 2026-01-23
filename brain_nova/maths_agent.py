@@ -1,6 +1,5 @@
 from langchain.agents.middleware.tool_call_limit import ToolCallLimitMiddleware
 from langchain.agents import create_agent
-from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from tavily import TavilyClient
@@ -61,7 +60,6 @@ maths_agent = create_agent(
             run_limit=5,
         )
     ],
-    checkpointer=InMemorySaver()
 )
 
 
